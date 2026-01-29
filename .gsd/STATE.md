@@ -1,19 +1,19 @@
 # STATE.md
 
 ## Current Position
-- **Phase**: 3 (completed)
-- **Task**: Phase 3 verified
-- **Status**: ✅ Ready for Phase 4 (Final Polish)
+- **Phase**: 4
+- **Task**: Planning complete
+- **Status**: 🟢 Ready for Phase 4 execution
 
 ## Recent Accomplishments
-- Implemented persistent Collection logic and stats.
-- Created champion favoriting system.
-- Built-out the Collection tab with progress header and segment switching.
-- Verified Phase 3 must-haves.
-
-## Last Session Summary
-Phase 3 executed successfully. The app now core features: browsing, searching, filtering, and collecting/wishlisting. The UI is starting to feel premium and focused.
+- Completed Phase 3 (Collection Logic).
+- Researched `expo-updates` integration and premium UI patterns.
+- Installed `expo-haptics`.
+- Created detailed execution plans for the final Polish & Settings.
 
 ## Next Steps
-1. /plan 4 — Create execution plans for Phase 4 (Polish & Settings).
-2. /execute 4 — Finalize Settings, App Updates, and UI polish.
+1. /execute 4.1 — Implement Settings screen and OTA update logic.
+2. /execute 4.2 — Apply haptic feedback and final UI refinements.
+
+## Blockers / Risks
+- OTA updates require proper EAS configuration/environment for real-world testing (mocked/simulated for local verification).
