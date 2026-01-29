@@ -19,7 +19,7 @@ export interface Skin {
 export interface SkinFilters {
     search?: string;
     rarity?: string;
-    sortBy?: 'name' | 'id';
+    sortBy?: 'name' | 'id' | 'champion';
     championId?: number | null;
     onlyFavorited?: boolean;
     onlyUnowned?: boolean;
@@ -62,7 +62,15 @@ export const useSkins = ({
                 query += ' AND s.is_owned = 0';
             }
 
-            const orderBy = sortBy === 'name' ? 's.name ASC' : 's.id DESC';
+            let orderBy = 's.id DESC';
+            switch (sortBy) {
+                case 'name':
+                    orderBy = 's.name ASC';
+                    break;
+                case 'champion':
+                    orderBy = 'c.name ASC, s.name ASC';
+                    break;
+            }
             query += ` ORDER BY ${orderBy}`;
 
             const result = await db.getAllAsync<Skin>(query, params);

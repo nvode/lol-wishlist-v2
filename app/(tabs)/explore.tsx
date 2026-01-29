@@ -30,7 +30,7 @@ const RARITY_COLORS: Record<string, string> = {
 export default function ExploreScreen() {
     const [search, setSearch] = useState('');
     const [rarity, setRarity] = useState('All');
-    const [sortBy, setSortBy] = useState<'name' | 'id'>('id');
+    const [sortBy, setSortBy] = useState<'name' | 'id' | 'champion'>('id');
     const [championId, setChampionId] = useState<number | null>(null);
     const [onlyFavorited, setOnlyFavorited] = useState(false);
     const [onlyUnowned, setOnlyUnowned] = useState(false);
@@ -191,7 +191,7 @@ export default function ExploreScreen() {
                 selectedRarity={rarity}
                 onRarityChange={setRarity}
                 sortBy={sortBy}
-                onSortChange={(sort) => setSortBy(sort as 'name' | 'id')}
+                onSortChange={(sort) => setSortBy(sort as 'name' | 'id' | 'champion')}
                 onlyUnowned={onlyUnowned}
                 onOnlyUnownedChange={setOnlyUnowned}
                 onlyFavorited={onlyFavorited}

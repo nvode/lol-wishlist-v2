@@ -34,6 +34,7 @@ const RARITY_LABELS: Record<string, string> = {
 
 const SORT_OPTIONS = [
     { value: 'name', label: 'Name (A-Z)' },
+    { value: 'champion', label: 'Champion' },
     { value: 'id', label: 'Release Date' },
 ];
 
