@@ -2,10 +2,9 @@ import { useChampions } from '@/hooks/useChampions';
 import { getAssetUrl } from '@/lib/assets';
 import { cn } from '@/lib/utils';
 import * as Haptics from 'expo-haptics';
-import { Image } from 'expo-image';
 import { Check, ChevronRight, Search, X } from 'lucide-react-native';
 import { useState } from 'react';
-import { FlatList, Modal, Pressable, ScrollView, Switch, Text, TextInput, View } from 'react-native';
+import { FlatList, Image, Modal, Pressable, ScrollView, Switch, Text, TextInput, View } from 'react-native';
 
 interface FilterModalProps {
     visible: boolean;

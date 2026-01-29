@@ -5,7 +5,6 @@ import { getAssetUrl } from '@/lib/assets';
 import { cn } from '@/lib/utils';
 import { FlashList } from '@shopify/flash-list';
 import * as Haptics from 'expo-haptics';
-// import { Image } from 'expo-image';
 import { CheckCircle2, Heart, Search, SlidersHorizontal } from 'lucide-react-native';
 import { useState } from 'react';
 import { ActivityIndicator, Image, Pressable, Text, TextInput, View } from 'react-native';
@@ -65,8 +64,7 @@ export default function ExploreScreen() {
                     <Image
                         source={{ uri: imageUrl || 'https://via.placeholder.com/150' }}
                         className="w-full aspect-[1/1] rounded-lg bg-muted"
-                        contentFit="cover"
-                        transition={200}
+                        resizeMode="cover"
                     />
                     {RARITY_COLORS[item.rarity] && (
                         <View

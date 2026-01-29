@@ -5,10 +5,9 @@ import { getAssetUrl } from '@/lib/assets';
 import { cn } from '@/lib/utils';
 import { FlashList } from '@shopify/flash-list';
 import * as Haptics from 'expo-haptics';
-import { Image } from 'expo-image';
 import { CheckCircle2, Heart, Plus, Star } from 'lucide-react-native';
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, Image, Pressable, Text, View } from 'react-native';
 
 type TabType = 'owned' | 'wishlist' | 'favorites';
 
@@ -43,8 +42,7 @@ export default function CollectionScreen() {
                 <Image
                     source={{ uri: getAssetUrl(activeTab === 'favorites' ? item.squarePortraitPath : item.tilePath) || '' }}
                     className="w-full aspect-square rounded-lg bg-muted"
-                    contentFit="cover"
-                    transition={200}
+                    resizeMode="cover"
                 />
                 {activeTab === 'favorites' && (
                     <Pressable
