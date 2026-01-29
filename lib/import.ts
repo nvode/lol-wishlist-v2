@@ -39,5 +39,8 @@ export const importData = async () => {
         }
     });
 
-    console.log('Import finished');
+    const finalChampCount = await db.getFirstAsync<{ count: number }>('SELECT COUNT(*) as count FROM champions');
+    const finalSkinCount = await db.getFirstAsync<{ count: number }>('SELECT COUNT(*) as count FROM skins');
+
+    console.log(`Import finished. Champions: ${finalChampCount?.count}, Skins: ${finalSkinCount?.count}`);
 };

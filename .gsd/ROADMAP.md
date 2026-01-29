@@ -14,8 +14,8 @@
 
 ## Phases
 
-### Phase 1: Foundation & Data ⬜
-**Status**: ⬜ Not Started
+### Phase 1: Foundation & Data ✅
+**Status**: ✅ Complete
 **Objective**: Initialize project structure and seed SQLite database with champion/skin data from JSON.
 - REQ-01: Set up Expo project with TypeScript and Tailwind.
 - REQ-02: Implement SQLite schema and data import script.
