@@ -3,10 +3,9 @@ import { useChampions } from '@/hooks/useChampions';
 import { getAssetUrl } from '@/lib/assets';
 import { cn } from '@/lib/utils';
 import * as Haptics from 'expo-haptics';
-import { Image } from 'expo-image';
 import { Check, Search, X } from 'lucide-react-native';
 import { useState } from 'react';
-import { ActivityIndicator, FlatList, Modal, Pressable, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, Modal, Pressable, Text, TextInput, View } from 'react-native';
 
 interface ChampionPickerModalProps {
     visible: boolean;
