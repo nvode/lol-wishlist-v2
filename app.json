@@ -2,6 +2,7 @@
   "expo": {
     "name": "lol-wishlist-v2",
     "slug": "lol-wishlist-v2",
+    "owner": "nvode",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -34,6 +35,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "5404e007-7ddf-421e-a77a-fc26fe777094"
+      }
     }
   }
 }
