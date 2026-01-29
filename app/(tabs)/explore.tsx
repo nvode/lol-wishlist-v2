@@ -5,10 +5,10 @@ import { getAssetUrl } from '@/lib/assets';
 import { cn } from '@/lib/utils';
 import { FlashList } from '@shopify/flash-list';
 import * as Haptics from 'expo-haptics';
-import { Image } from 'expo-image';
+// import { Image } from 'expo-image';
 import { CheckCircle2, Heart, Search, SlidersHorizontal } from 'lucide-react-native';
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Image, Pressable, Text, TextInput, View } from 'react-native';
 
 const RARITIES = ['All', 'kNoRarity', 'kEpic', 'kLegendary', 'kMythic', 'kUltimate'];
 const RARITY_LABELS: Record<string, string> = {
@@ -70,22 +70,22 @@ export default function ExploreScreen() {
                     )}
                     <View className="absolute top-1.5 right-1.5 flex-row gap-1.5">
                         <Pressable
-                            onPress={() => handleToggleOwned(item.id, item.is_owned !== 1)}
+                            onPress={() => handleToggleOwned(item.id, !item.is_owned)}
                             className={cn(
                                 "p-1.5 rounded-full shadow-sm",
-                                item.is_owned === 1 ? "bg-success" : "bg-card/90"
+                                item.is_owned ? "bg-success" : "bg-card/90"
                             )}
                         >
-                            <CheckCircle2 size={12} color={item.is_owned === 1 ? "white" : "#71717a"} strokeWidth={2} />
+                            <CheckCircle2 size={12} color={item.is_owned ? "white" : "#71717a"} strokeWidth={2} />
                         </Pressable>
                         <Pressable
-                            onPress={() => handleToggleWishlist(item.id, item.is_wishlisted !== 1)}
+                            onPress={() => handleToggleWishlist(item.id, !item.is_wishlisted)}
                             className={cn(
                                 "p-1.5 rounded-full shadow-sm",
-                                item.is_wishlisted === 1 ? "bg-info" : "bg-card/90"
+                                item.is_wishlisted ? "bg-info" : "bg-card/90"
                             )}
                         >
-                            <Heart size={12} color={item.is_wishlisted === 1 ? "white" : "#71717a"} strokeWidth={2} fill={item.is_wishlisted === 1 ? "white" : "transparent"} />
+                            <Heart size={12} color={item.is_wishlisted ? "white" : "#71717a"} strokeWidth={2} fill={item.is_wishlisted ? "white" : "transparent"} />
                         </Pressable>
                     </View>
                 </View>

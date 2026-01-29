@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 export interface Skin {
     id: number;
     champion_id: number;
-    name: number;
+    name: string;
     rarity: string;
     is_legacy: number;
     splashPath: string;
