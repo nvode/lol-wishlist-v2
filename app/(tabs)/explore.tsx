@@ -31,9 +31,19 @@ export default function ExploreScreen() {
     const [search, setSearch] = useState('');
     const [rarity, setRarity] = useState('All');
     const [sortBy, setSortBy] = useState<'name' | 'id'>('id');
+    const [championId, setChampionId] = useState<number | null>(null);
+    const [onlyFavorited, setOnlyFavorited] = useState(false);
+    const [onlyUnowned, setOnlyUnowned] = useState(false);
     const [filterModalVisible, setFilterModalVisible] = useState(false);
 
-    const { data: skins, isLoading } = useSkins(search, rarity === 'All' ? '' : rarity, sortBy);
+    const { data: skins, isLoading } = useSkins({
+        search,
+        rarity: rarity === 'All' ? '' : rarity,
+        sortBy,
+        championId,
+        onlyFavorited,
+        onlyUnowned
+    });
     const { toggleOwned, toggleWishlist } = useSkinMutations();
 
     const handleToggleOwned = (id: number, isOwned: boolean) => {
@@ -101,6 +111,13 @@ export default function ExploreScreen() {
         );
     };
 
+    const activeFilterCount = [
+        rarity !== 'All',
+        championId !== null,
+        onlyFavorited,
+        onlyUnowned
+    ].filter(Boolean).length;
+
     return (
         <View className="flex-1 bg-background px-4">
             <View className="py-6 space-y-3">
@@ -123,9 +140,12 @@ export default function ExploreScreen() {
                             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                             setFilterModalVisible(true);
                         }}
-                        className="p-2 rounded-lg bg-muted"
+                        className="p-2 rounded-lg bg-muted relative"
                     >
-                        <SlidersHorizontal size={16} color="#71717a" strokeWidth={2} />
+                        <SlidersHorizontal size={16} color={activeFilterCount > 0 ? "#18181b" : "#71717a"} strokeWidth={2} />
+                        {activeFilterCount > 0 && (
+                            <View className="absolute top-1 right-1 w-2 h-2 bg-foreground rounded-full border border-card" />
+                        )}
                     </Pressable>
                 </View>
 
@@ -172,6 +192,12 @@ export default function ExploreScreen() {
                 onRarityChange={setRarity}
                 sortBy={sortBy}
                 onSortChange={(sort) => setSortBy(sort as 'name' | 'id')}
+                onlyUnowned={onlyUnowned}
+                onOnlyUnownedChange={setOnlyUnowned}
+                onlyFavorited={onlyFavorited}
+                onOnlyFavoritedChange={setOnlyFavorited}
+                selectedChampionId={championId}
+                onSelectedChampionChange={setChampionId}
             />
         </View>
     );

@@ -1,7 +1,11 @@
+import { useChampions } from '@/hooks/useChampions';
+import { getAssetUrl } from '@/lib/assets';
 import { cn } from '@/lib/utils';
 import * as Haptics from 'expo-haptics';
-import { X } from 'lucide-react-native';
-import { Modal, Pressable, ScrollView, Text, View } from 'react-native';
+import { Image } from 'expo-image';
+import { Check, ChevronRight, Search, X } from 'lucide-react-native';
+import { useState } from 'react';
+import { FlatList, Modal, Pressable, ScrollView, Switch, Text, TextInput, View } from 'react-native';
 
 interface FilterModalProps {
     visible: boolean;
@@ -10,11 +14,17 @@ interface FilterModalProps {
     onRarityChange: (rarity: string) => void;
     sortBy: string;
     onSortChange: (sort: string) => void;
+    onlyUnowned: boolean;
+    onOnlyUnownedChange: (val: boolean) => void;
+    onlyFavorited: boolean;
+    onOnlyFavoritedChange: (val: boolean) => void;
+    selectedChampionId: number | null;
+    onSelectedChampionChange: (id: number | null) => void;
 }
 
-const RARITIES = ['all', 'kMythic', 'kUltimate', 'kLegendary', 'kEpic', 'kNoRarity'];
+const RARITIES = ['All', 'kMythic', 'kUltimate', 'kLegendary', 'kEpic', 'kNoRarity'];
 const RARITY_LABELS: Record<string, string> = {
-    all: 'All Rarities',
+    All: 'All Rarities',
     kMythic: 'Mythic',
     kUltimate: 'Ultimate',
     kLegendary: 'Legendary',
@@ -34,7 +44,93 @@ export default function FilterModal({
     onRarityChange,
     sortBy,
     onSortChange,
+    onlyUnowned,
+    onOnlyUnownedChange,
+    onlyFavorited,
+    onOnlyFavoritedChange,
+    selectedChampionId,
+    onSelectedChampionChange,
 }: FilterModalProps) {
+    const { data: champions } = useChampions();
+    const [showChampionList, setShowChampionList] = useState(false);
+    const [championSearch, setChampionSearch] = useState('');
+
+    const filteredChampions = champions?.filter(c =>
+        c.name.toLowerCase().includes(championSearch.toLowerCase())
+    );
+
+    const selectedChampion = champions?.find(c => c.id === selectedChampionId);
+
+    const renderChampionItem = ({ item }: { item: any }) => (
+        <Pressable
+            onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                onSelectedChampionChange(item.id);
+                setShowChampionList(false);
+            }}
+            className={cn(
+                "flex-row items-center p-3 border-b border-border",
+                selectedChampionId === item.id ? "bg-muted" : "bg-card"
+            )}
+        >
+            <Image
+                source={{ uri: getAssetUrl(item.squarePortraitPath) || '' }}
+                className="w-10 h-10 rounded-full bg-muted"
+            />
+            <Text className="ml-3 font-semibold text-foreground flex-1">{item.name}</Text>
+            {selectedChampionId === item.id && <Check size={20} color="#18181b" />}
+        </Pressable>
+    );
+
+    if (showChampionList) {
+        return (
+            <Modal visible={visible} animationType="slide" transparent>
+                <View className="flex-1 bg-background pt-12">
+                    <View className="flex-row items-center px-4 pb-4 border-b border-border">
+                        <Pressable
+                            onPress={() => setShowChampionList(false)}
+                            className="p-2 -ml-2"
+                        >
+                            <X size={24} color="#18181b" />
+                        </Pressable>
+                        <Text className="text-xl font-bold ml-2 flex-1">Select Champion</Text>
+                    </View>
+
+                    <View className="p-4 border-b border-border">
+                        <View className="flex-row items-center bg-muted px-3 py-2 rounded-lg">
+                            <Search size={18} color="#71717a" />
+                            <TextInput
+                                placeholder="Search..."
+                                value={championSearch}
+                                onChangeText={setChampionSearch}
+                                className="flex-1 ml-2 text-foreground"
+                                placeholderTextColor="#71717a"
+                            />
+                        </View>
+                    </View>
+
+                    <Pressable
+                        onPress={() => {
+                            onSelectedChampionChange(null);
+                            setShowChampionList(false);
+                        }}
+                        className="p-4 border-b border-border flex-row items-center justify-between"
+                    >
+                        <Text className="font-semibold text-muted-foreground">All Champions</Text>
+                        {!selectedChampionId && <Check size={20} color="#18181b" />}
+                    </Pressable>
+
+                    <FlatList
+                        data={filteredChampions}
+                        renderItem={renderChampionItem}
+                        keyExtractor={item => item.id.toString()}
+                        className="flex-1"
+                    />
+                </View>
+            </Modal>
+        );
+    }
+
     return (
         <Modal
             visible={visible}
@@ -44,9 +140,9 @@ export default function FilterModal({
         >
             <View className="flex-1 bg-black/50">
                 <Pressable className="flex-1" onPress={onClose} />
-                <View className="bg-background rounded-t-2xl p-6 pb-10">
+                <View className="bg-background rounded-t-2xl max-h-[90%]">
                     {/* Header */}
-                    <View className="flex-row items-center justify-between mb-6">
+                    <View className="flex-row items-center justify-between p-6 border-b border-border">
                         <Text className="text-xl font-bold text-foreground">Filters</Text>
                         <Pressable
                             onPress={() => {
@@ -59,9 +155,58 @@ export default function FilterModal({
                         </Pressable>
                     </View>
 
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ padding: 24, paddingBottom: 40 }}>
+                        {/* Champion Filter */}
+                        <View className="mb-8">
+                            <Text className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">
+                                Champion
+                            </Text>
+                            <Pressable
+                                onPress={() => {
+                                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                                    setShowChampionList(true);
+                                }}
+                                className="flex-row items-center justify-between bg-card p-4 rounded-lg border border-border"
+                            >
+                                <View className="flex-row items-center">
+                                    {selectedChampion ? (
+                                        <>
+                                            <Image
+                                                source={{ uri: getAssetUrl(selectedChampion.squarePortraitPath) || '' }}
+                                                className="w-8 h-8 rounded-full bg-muted mr-3"
+                                            />
+                                            <Text className="font-semibold text-foreground">{selectedChampion.name}</Text>
+                                        </>
+                                    ) : (
+                                        <Text className="text-muted-foreground font-medium">All Champions</Text>
+                                    )}
+                                </View>
+                                <ChevronRight size={20} color="#71717a" />
+                            </Pressable>
+                        </View>
+
+                        {/* Toggles */}
+                        <View className="mb-8 gap-4">
+                            <View className="flex-row items-center justify-between bg-card p-4 rounded-lg border border-border">
+                                <Text className="font-semibold text-foreground">Show Unowned Only</Text>
+                                <Switch
+                                    value={onlyUnowned}
+                                    onValueChange={onOnlyUnownedChange}
+                                    trackColor={{ false: '#e4e4e7', true: '#18181b' }}
+                                />
+                            </View>
+                            <View className="flex-row items-center justify-between bg-card p-4 rounded-lg border border-border">
+                                <Text className="font-semibold text-foreground">Favorited Champions Only</Text>
+                                <Switch
+                                    value={onlyFavorited}
+                                    onValueChange={onOnlyFavoritedChange}
+                                    trackColor={{ false: '#e4e4e7', true: '#18181b' }}
+                                />
+                            </View>
+                        </View>
+
                         {/* Rarity Filter */}
-                        <View className="mb-6">
+                        <View className="mb-8">
                             <Text className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">
                                 Rarity
                             </Text>
@@ -94,7 +239,7 @@ export default function FilterModal({
                         </View>
 
                         {/* Sort Options */}
-                        <View className="mb-6">
+                        <View className="mb-8">
                             <Text className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">
                                 Sort By
                             </Text>

@@ -16,9 +16,25 @@ export interface Skin {
     champion_name: string;
 }
 
-export const useSkins = (search: string = '', rarity: string = '', sortBy: 'name' | 'id' = 'name') => {
+export interface SkinFilters {
+    search?: string;
+    rarity?: string;
+    sortBy?: 'name' | 'id';
+    championId?: number | null;
+    onlyFavorited?: boolean;
+    onlyUnowned?: boolean;
+}
+
+export const useSkins = ({
+    search = '',
+    rarity = '',
+    sortBy = 'name',
+    championId = null,
+    onlyFavorited = false,
+    onlyUnowned = false,
+}: SkinFilters) => {
     return useQuery({
-        queryKey: ['skins', search, rarity, sortBy],
+        queryKey: ['skins', search, rarity, sortBy, championId, onlyFavorited ? 'fav' : 'all', onlyUnowned ? 'unowned' : 'all'],
         queryFn: async (): Promise<Skin[]> => {
             let query = `
         SELECT s.*, c.name as champion_name 
@@ -31,6 +47,19 @@ export const useSkins = (search: string = '', rarity: string = '', sortBy: 'name
             if (rarity && rarity !== 'All') {
                 query += ' AND s.rarity = ?';
                 params.push(rarity);
+            }
+
+            if (championId) {
+                query += ' AND s.champion_id = ?';
+                params.push(championId);
+            }
+
+            if (onlyFavorited) {
+                query += ' AND c.is_favorited = 1';
+            }
+
+            if (onlyUnowned) {
+                query += ' AND s.is_owned = 0';
             }
 
             const orderBy = sortBy === 'name' ? 's.name ASC' : 's.id DESC';
