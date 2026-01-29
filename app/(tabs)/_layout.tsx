@@ -8,6 +8,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      initialRouteName="collection"
       screenOptions={{
         tabBarActiveTintColor: '#18181b',
         headerShown: true,
