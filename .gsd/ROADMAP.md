@@ -28,8 +28,8 @@
 - REQ-05: Build search and filter logic (Champion, Rarity, Line).
 - REQ-06: Implement sorting (Price, Date).
 
-### Phase 3: Collection Logic ⬜
-**Status**: ⬜ Not Started
+### Phase 3: Collection Logic ✅
+**Status**: ✅ Complete
 **Objective**: Implement the persistent state for Owned, Wishlisted, and Favorite status.
 - REQ-07: Add toggle buttons for Owned/Wishlist state.
 - REQ-08: Build the Collection tab views (Owned list, Wishlist, Favorites).
