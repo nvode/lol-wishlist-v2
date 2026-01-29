@@ -3,6 +3,7 @@ import { useSkins } from '@/hooks/useSkins';
 import { getAssetUrl } from '@/lib/assets';
 import { cn } from '@/lib/utils';
 import { FlashList } from '@shopify/flash-list';
+import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { ArrowUpDown, CheckCircle2, Heart, Search } from 'lucide-react-native';
 import { useState } from 'react';
@@ -33,6 +34,16 @@ export default function ExploreScreen() {
     const { data: skins, isLoading } = useSkins(search, rarity, sortBy);
     const { toggleOwned, toggleWishlist } = useSkinMutations();
 
+    const handleToggleOwned = (id: number, owned: boolean) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        toggleOwned.mutate({ id, owned });
+    };
+
+    const handleToggleWishlist = (id: number, wishlisted: boolean) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        toggleWishlist.mutate({ id, wishlisted });
+    };
+
     const renderSkin = ({ item }: { item: any }) => (
         <View className="flex-1 p-2 m-1 bg-white rounded-xl shadow-sm border border-neutral-100">
             <View className="relative">
@@ -54,7 +65,7 @@ export default function ExploreScreen() {
                 )}
                 <View className="absolute top-1.5 right-1.5 flex-row gap-1.5">
                     <Pressable
-                        onPress={() => toggleOwned.mutate({ id: item.id, owned: item.is_owned !== 1 })}
+                        onPress={() => handleToggleOwned(item.id, item.is_owned !== 1)}
                         className={cn(
                             "p-1.5 rounded-full shadow-sm",
                             item.is_owned === 1 ? "bg-green-500" : "bg-white/90"
@@ -63,7 +74,7 @@ export default function ExploreScreen() {
                         <CheckCircle2 size={12} color={item.is_owned === 1 ? "white" : "#404040"} strokeWidth={2} />
                     </Pressable>
                     <Pressable
-                        onPress={() => toggleWishlist.mutate({ id: item.id, wishlisted: item.is_wishlisted !== 1 })}
+                        onPress={() => handleToggleWishlist(item.id, item.is_wishlisted !== 1)}
                         className={cn(
                             "p-1.5 rounded-full shadow-sm",
                             item.is_wishlisted === 1 ? "bg-blue-500" : "bg-white/90"
@@ -108,7 +119,10 @@ export default function ExploreScreen() {
                         {RARITIES.map((r) => (
                             <Pressable
                                 key={r}
-                                onPress={() => setRarity(r)}
+                                onPress={() => {
+                                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                                    setRarity(r);
+                                }}
                                 className={cn(
                                     "px-4 py-1.5 rounded-full mr-2 border",
                                     rarity === r ? "bg-black border-black" : "bg-white border-neutral-200"
@@ -130,7 +144,10 @@ export default function ExploreScreen() {
                         {skins?.length || 0} Results
                     </Text>
                     <Pressable
-                        onPress={() => setSortBy(s => s === 'name' ? 'id' : 'name')}
+                        onPress={() => {
+                            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                            setSortBy(s => s === 'name' ? 'id' : 'name');
+                        }}
                         className="flex-row items-center bg-white border border-neutral-200 px-3 py-1.5 rounded-lg"
                     >
                         <ArrowUpDown size={12} color="#525252" strokeWidth={1.5} />

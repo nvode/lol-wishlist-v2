@@ -1,87 +1,143 @@
-import { cn } from '@/lib/utils';
+import { db } from '@/lib/db';
+import { useQueryClient } from '@tanstack/react-query';
+import * as Haptics from 'expo-haptics';
 import * as Updates from 'expo-updates';
-import { Github, Info, RefreshCcw, User } from 'lucide-react-native';
-import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { Database, Github, Heart, Info, RefreshCcw, ShieldCheck } from 'lucide-react-native';
+import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
 
 export default function SettingsScreen() {
+    const queryClient = useQueryClient();
+    const { currentlyRunning, isUpdateAvailable, isUpdatePending } = Updates.useUpdates();
+
     const onCheckForUpdates = async () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         try {
             const update = await Updates.checkForUpdateAsync();
             if (update.isAvailable) {
                 Alert.alert(
                     'Update Available',
-                    'A new version of the app is available. Would you like to update now?',
+                    'A new version is ready. Download and restart?',
                     [
-                        { text: 'Cancel', style: 'cancel' },
-                        { text: 'Update', onPress: () => Updates.fetchUpdateAsync().then(() => Updates.reloadAsync()) }
+                        { text: 'Not Now', style: 'cancel' },
+                        {
+                            text: 'Update',
+                            onPress: async () => {
+                                await Updates.fetchUpdateAsync();
+                                await Updates.reloadAsync();
+                            }
+                        }
                     ]
                 );
             } else {
                 Alert.alert('Up to Date', 'You are running the latest version.');
             }
         } catch (e) {
-            Alert.alert('Error', 'Failed to check for updates.');
+            Alert.alert('Check Failed', 'Could not reach update server.');
         }
     };
 
-    const menuItems = [
-        {
-            label: 'Check for Updates',
-            icon: RefreshCcw,
-            onPress: onCheckForUpdates,
-            description: 'Ensure you have the latest features and data.'
-        },
-        {
-            label: 'About',
-            icon: Info,
-            onPress: () => Alert.alert('LoL Wishlist', 'A fan-made app for tracking League of Legends skins.'),
-        },
-    ];
+    const resetDatabase = () => {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+        Alert.alert(
+            'Reset Data',
+            'This will clear all owned and wishlisted skins. This cannot be undone.',
+            [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                    text: 'Reset Everything',
+                    style: 'destructive',
+                    onPress: async () => {
+                        await db.runAsync('UPDATE skins SET is_owned = 0, is_wishlisted = 0');
+                        await db.runAsync('UPDATE champions SET is_favorited = 0');
+                        queryClient.invalidateQueries();
+                        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                        Alert.alert('Reset Complete', 'Your collection has been cleared.');
+                    }
+                }
+            ]
+        );
+    };
+
+    const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+        <View className="mb-6">
+            <Text className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3 ml-1">{title}</Text>
+            <View className="bg-white rounded-2xl overflow-hidden border border-neutral-100 shadow-sm">
+                {children}
+            </View>
+        </View>
+    );
+
+    const Row = ({ label, icon: Icon, onPress, value, color = "#404040", description }: any) => (
+        <Pressable
+            onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                onPress?.();
+            }}
+            className="flex-row items-center p-4 active:bg-neutral-50 border-b border-neutral-50 last:border-b-0"
+        >
+            <View className="w-8 h-8 rounded-lg items-center justify-center" style={{ backgroundColor: `${color}10` }}>
+                <Icon size={16} color={color} strokeWidth={2} />
+            </View>
+            <View className="ml-3 flex-1">
+                <Text className="text-[13px] font-bold text-neutral-900">{label}</Text>
+                {description && <Text className="text-[10px] text-neutral-500 mt-0.5">{description}</Text>}
+            </View>
+            {value && <Text className="text-xs font-medium text-neutral-400">{value}</Text>}
+        </Pressable>
+    );
 
     return (
-        <ScrollView className="flex-1 bg-neutral-50">
-            <View className="p-4 space-y-6">
-                <View className="items-center py-8">
-                    <View className="w-20 h-20 bg-black rounded-3xl items-center justify-center mb-4">
-                        <User size={40} color="white" strokeWidth={1} />
-                    </View>
-                    <Text className="text-xl font-bold text-neutral-900">Skin Explorer</Text>
-                    <Text className="text-sm text-neutral-500">v1.0.0</Text>
-                </View>
+        <ScrollView className="flex-1 bg-neutral-50" contentContainerStyle={{ padding: 20 }}>
+            <View className="py-6">
+                <Text className="text-3xl font-black text-neutral-900">Settings</Text>
+                <Text className="text-sm text-neutral-500 mt-1">Manage your application and data</Text>
+            </View>
 
-                <View className="bg-white rounded-2xl overflow-hidden border border-neutral-200">
-                    {menuItems.map((item, index) => {
-                        const Icon = item.icon;
-                        return (
-                            <Pressable
-                                key={item.label}
-                                onPress={item.onPress}
-                                className={cn(
-                                    "flex-row items-center p-4 active:bg-neutral-50",
-                                    index !== 0 && "border-t border-neutral-100"
-                                )}
-                            >
-                                <View className="w-10 h-10 bg-neutral-100 rounded-xl items-center justify-center">
-                                    <Icon size={20} color="#404040" strokeWidth={1.5} />
-                                </View>
-                                <View className="ml-4 flex-1">
-                                    <Text className="text-sm font-bold text-neutral-900">{item.label}</Text>
-                                    {item.description && (
-                                        <Text className="text-[10px] text-neutral-500 mt-0.5">{item.description}</Text>
-                                    )}
-                                </View>
-                            </Pressable>
-                        );
-                    })}
-                </View>
+            <Section title="App Information">
+                <Row
+                    label="Check for Updates"
+                    icon={RefreshCcw}
+                    onPress={onCheckForUpdates}
+                    description={isUpdateAvailable ? "New update ready" : "App is up to date"}
+                    color="#0ea5e9"
+                />
+                <Row
+                    label="Version"
+                    icon={ShieldCheck}
+                    value="1.0.0"
+                    color="#10b981"
+                />
+            </Section>
 
-                <View className="bg-white rounded-2xl p-4 border border-neutral-200">
-                    <Text className="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-3">Links</Text>
-                    <Pressable className="flex-row items-center py-2">
-                        <Github size={16} color="#737373" strokeWidth={1.5} />
-                        <Text className="ml-3 text-sm text-neutral-600">Give Feedback</Text>
-                    </Pressable>
-                </View>
+            <Section title="Data Management">
+                <Row
+                    label="Reset App Data"
+                    icon={Database}
+                    onPress={resetDatabase}
+                    color="#ef4444"
+                    description="Clear collection & wishlist"
+                />
+            </Section>
+
+            <Section title="About">
+                <Row
+                    label="CommunityDragon"
+                    icon={Info}
+                    onPress={() => Linking.openURL('https://communitydragon.org')}
+                    description="Assets and data source"
+                    color="#8b5cf6"
+                />
+                <Row
+                    label="Give Feedback"
+                    icon={Github}
+                    onPress={() => Linking.openURL('https://github.com')}
+                    color="#404040"
+                />
+            </Section>
+
+            <View className="items-center py-10 opacity-30">
+                <Heart size={20} color="#000" fill="#000" />
+                <Text className="text-[10px] font-bold uppercase tracking-tighter mt-2">Made for League Fans</Text>
             </View>
         </ScrollView>
     );

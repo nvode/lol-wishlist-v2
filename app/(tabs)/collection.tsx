@@ -3,6 +3,7 @@ import { useCollection } from '@/hooks/useCollection';
 import { getAssetUrl } from '@/lib/assets';
 import { cn } from '@/lib/utils';
 import { FlashList } from '@shopify/flash-list';
+import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { CheckCircle2, Heart, Star } from 'lucide-react-native';
 import { useState } from 'react';
@@ -14,6 +15,16 @@ export default function CollectionScreen() {
     const [activeTab, setActiveTab] = useState<TabType>('owned');
     const { data, isLoading } = useCollection(activeTab);
     const { toggleFavorite } = useChampionMutations();
+
+    const handleTabChange = (type: TabType) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        setActiveTab(type);
+    };
+
+    const handleToggleFavorite = (id: number) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        toggleFavorite.mutate({ id, favorited: false });
+    };
 
     const tabs: { type: TabType; label: string; icon: any }[] = [
         { type: 'owned', label: 'Owned', icon: CheckCircle2 },
@@ -35,7 +46,7 @@ export default function CollectionScreen() {
                 />
                 {activeTab === 'favorites' && (
                     <Pressable
-                        onPress={() => toggleFavorite.mutate({ id: item.id, favorited: false })}
+                        onPress={() => handleToggleFavorite(item.id)}
                         className="absolute top-1.5 right-1.5 p-1.5 rounded-full bg-black/50 shadow-sm"
                     >
                         <Star size={10} color="white" fill="white" strokeWidth={1.5} />
@@ -81,7 +92,7 @@ export default function CollectionScreen() {
                     return (
                         <Pressable
                             key={tab.type}
-                            onPress={() => setActiveTab(tab.type)}
+                            onPress={() => handleTabChange(tab.type)}
                             className={cn(
                                 "flex-1 flex-row items-center justify-center py-2.5 rounded-xl border",
                                 isActive ? "bg-black border-black shadow-sm" : "bg-white border-neutral-200"
