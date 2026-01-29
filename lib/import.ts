@@ -2,6 +2,29 @@ import championsData from '../assets/data/champions.json';
 import { db } from './db';
 
 export const importData = async () => {
+    // Check for Zaahen specific patch (ID 9999)
+    const zaahenExists = await db.getFirstAsync('SELECT id FROM champions WHERE id = 9999');
+    if (!zaahenExists) {
+        const zaahen = (championsData as any[]).find(c => c.id === 9999);
+        if (zaahen) {
+            console.log('Patching Zaahen...');
+            await db.withTransactionAsync(async () => {
+                await db.runAsync(
+                    'INSERT INTO champions (id, name, alias, description, squarePortraitPath) VALUES (?, ?, ?, ?, ?)',
+                    [zaahen.id, zaahen.name, zaahen.alias, zaahen.description, zaahen.squarePortraitPath]
+                );
+                if (zaahen.skins) {
+                    for (const skin of zaahen.skins) {
+                        await db.runAsync(
+                            'INSERT INTO skins (id, champion_id, name, rarity, is_legacy, splashPath, tilePath, loadScreenPath, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                            [skin.id, zaahen.id, skin.name, skin.rarity, skin.isLegacy ? 1 : 0, skin.splashPath, skin.tilePath, skin.loadScreenPath, skin.description]
+                        );
+                    }
+                }
+            });
+        }
+    }
+
     // Check if data already exists to avoid re-importing
     const countRes = await db.getFirstAsync<{ count: number }>('SELECT COUNT(*) as count FROM champions');
     if (countRes && countRes.count > 0) {
