@@ -80,22 +80,24 @@ export default function ExploreScreen() {
                     )}
                     <View className="absolute top-1.5 right-1.5 flex-row gap-1.5">
                         <Pressable
+                            hitSlop={8}
                             onPress={() => handleToggleOwned(item.id, !item.is_owned)}
                             className={cn(
-                                "p-1.5 rounded-full shadow-sm",
+                                "p-2 rounded-full shadow-sm",
                                 item.is_owned ? "bg-success" : "bg-card/90"
                             )}
                         >
-                            <CheckCircle2 size={12} color={item.is_owned ? "white" : "#71717a"} strokeWidth={2} />
+                            <CheckCircle2 size={14} color={item.is_owned ? "white" : "#71717a"} strokeWidth={2} />
                         </Pressable>
                         <Pressable
+                            hitSlop={8}
                             onPress={() => handleToggleWishlist(item.id, !item.is_wishlisted)}
                             className={cn(
-                                "p-1.5 rounded-full shadow-sm",
+                                "p-2 rounded-full shadow-sm",
                                 item.is_wishlisted ? "bg-info" : "bg-card/90"
                             )}
                         >
-                            <Heart size={12} color={item.is_wishlisted ? "white" : "#71717a"} strokeWidth={2} fill={item.is_wishlisted ? "white" : "transparent"} />
+                            <Heart size={14} color={item.is_wishlisted ? "white" : "#71717a"} strokeWidth={2} fill={item.is_wishlisted ? "white" : "transparent"} />
                         </Pressable>
                     </View>
                 </View>
