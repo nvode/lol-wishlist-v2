@@ -60,8 +60,8 @@ export default function SettingsScreen() {
 
     const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
         <View className="mb-6">
-            <Text className="text-[10px] font-black uppercase tracking-widest text-neutral-400 mb-3 ml-1">{title}</Text>
-            <View className="bg-white rounded-2xl overflow-hidden border border-neutral-100 shadow-sm">
+            <Text className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-3 ml-1">{title}</Text>
+            <View className="bg-card rounded-2xl overflow-hidden border border-border shadow-sm">
                 {children}
             </View>
         </View>
@@ -73,24 +73,24 @@ export default function SettingsScreen() {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 onPress?.();
             }}
-            className="flex-row items-center p-4 active:bg-neutral-50 border-b border-neutral-50 last:border-b-0"
+            className="flex-row items-center p-4 active:bg-muted border-b border-border last:border-b-0"
         >
             <View className="w-8 h-8 rounded-lg items-center justify-center" style={{ backgroundColor: `${color}10` }}>
                 <Icon size={16} color={color} strokeWidth={2} />
             </View>
             <View className="ml-3 flex-1">
-                <Text className="text-[13px] font-bold text-neutral-900">{label}</Text>
-                {description && <Text className="text-[10px] text-neutral-500 mt-0.5">{description}</Text>}
+                <Text className="text-[13px] font-bold text-foreground">{label}</Text>
+                {description && <Text className="text-[10px] text-muted-foreground mt-0.5">{description}</Text>}
             </View>
-            {value && <Text className="text-xs font-medium text-neutral-400">{value}</Text>}
+            {value && <Text className="text-xs font-medium text-muted-foreground">{value}</Text>}
         </Pressable>
     );
 
     return (
-        <ScrollView className="flex-1 bg-neutral-50" contentContainerStyle={{ padding: 20 }}>
+        <ScrollView className="flex-1 bg-background" contentContainerStyle={{ padding: 20 }}>
             <View className="py-6">
-                <Text className="text-3xl font-black text-neutral-900">Settings</Text>
-                <Text className="text-sm text-neutral-500 mt-1">Manage your application and data</Text>
+                <Text className="text-3xl font-black text-foreground">Settings</Text>
+                <Text className="text-sm text-muted-foreground mt-1">Manage your application and data</Text>
             </View>
 
             <Section title="App Information">

@@ -45,11 +45,11 @@ export default function ExploreScreen() {
     };
 
     const renderSkin = ({ item }: { item: any }) => (
-        <View className="flex-1 p-2 m-1 bg-white rounded-xl shadow-sm border border-neutral-100">
+        <View className="flex-1 p-2 m-1 bg-card rounded-xl shadow-sm border border-border">
             <View className="relative">
                 <Image
                     source={{ uri: getAssetUrl(item.tilePath) || '' }}
-                    className="w-full aspect-[1/1] rounded-lg bg-neutral-100"
+                    className="w-full aspect-[1/1] rounded-lg bg-muted"
                     contentFit="cover"
                     transition={200}
                 />
@@ -68,7 +68,7 @@ export default function ExploreScreen() {
                         onPress={() => handleToggleOwned(item.id, item.is_owned !== 1)}
                         className={cn(
                             "p-1.5 rounded-full shadow-sm",
-                            item.is_owned === 1 ? "bg-green-500" : "bg-white/90"
+                            item.is_owned === 1 ? "bg-success" : "bg-card/90"
                         )}
                     >
                         <CheckCircle2 size={12} color={item.is_owned === 1 ? "white" : "#404040"} strokeWidth={2} />
@@ -77,7 +77,7 @@ export default function ExploreScreen() {
                         onPress={() => handleToggleWishlist(item.id, item.is_wishlisted !== 1)}
                         className={cn(
                             "p-1.5 rounded-full shadow-sm",
-                            item.is_wishlisted === 1 ? "bg-blue-500" : "bg-white/90"
+                            item.is_wishlisted === 1 ? "bg-info" : "bg-card/90"
                         )}
                     >
                         <Heart size={12} color={item.is_wishlisted === 1 ? "white" : "#404040"} strokeWidth={2} fill={item.is_wishlisted === 1 ? "white" : "transparent"} />
@@ -85,10 +85,10 @@ export default function ExploreScreen() {
                 </View>
             </View>
             <View className="mt-2">
-                <Text className="text-[11px] font-bold text-neutral-900" numberOfLines={1}>
+                <Text className="text-[11px] font-bold text-foreground" numberOfLines={1}>
                     {item.name}
                 </Text>
-                <Text className="text-[9px] text-neutral-500">
+                <Text className="text-[9px] text-muted-foreground">
                     {item.champion_name}
                 </Text>
             </View>
@@ -96,20 +96,20 @@ export default function ExploreScreen() {
     );
 
     return (
-        <View className="flex-1 bg-neutral-50 px-4">
+        <View className="flex-1 bg-background px-4">
             <View className="py-4 space-y-3">
-                <View className="flex-row items-center bg-white px-3 py-2 rounded-full border border-neutral-200">
+                <View className="flex-row items-center bg-card px-3 py-2 rounded-full border border-border">
                     <Search size={18} color="#737373" strokeWidth={1.5} />
                     <TextInput
                         placeholder="Search skins or champions..."
-                        className="flex-1 ml-2 text-neutral-900 text-sm"
+                        className="flex-1 ml-2 text-foreground text-sm"
                         value={search}
                         onChangeText={setSearch}
                         placeholderTextColor="#A3A3A3"
                     />
                     {search.length > 0 && (
                         <Pressable onPress={() => setSearch('')}>
-                            <Text className="text-xs text-neutral-400 px-2">Clear</Text>
+                            <Text className="text-xs text-muted-foreground px-2">Clear</Text>
                         </Pressable>
                     )}
                 </View>
@@ -125,12 +125,12 @@ export default function ExploreScreen() {
                                 }}
                                 className={cn(
                                     "px-4 py-1.5 rounded-full mr-2 border",
-                                    rarity === r ? "bg-black border-black" : "bg-white border-neutral-200"
+                                    rarity === r ? "bg-primary border-primary" : "bg-card border-border"
                                 )}
                             >
                                 <Text className={cn(
                                     "text-[10px] font-bold",
-                                    rarity === r ? "text-white" : "text-neutral-500"
+                                    rarity === r ? "text-primary-foreground" : "text-muted-foreground"
                                 )}>
                                     {RARITY_LABELS[r]}
                                 </Text>
@@ -139,8 +139,8 @@ export default function ExploreScreen() {
                     </ScrollView>
                 </View>
 
-                <View className="flex-row justify-between items-center bg-neutral-100/50 p-2 rounded-xl">
-                    <Text className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest ml-1">
+                <View className="flex-row justify-between items-center bg-muted/50 p-2 rounded-xl">
+                    <Text className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest ml-1">
                         {skins?.length || 0} Results
                     </Text>
                     <Pressable
@@ -148,10 +148,10 @@ export default function ExploreScreen() {
                             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                             setSortBy(s => s === 'name' ? 'id' : 'name');
                         }}
-                        className="flex-row items-center bg-white border border-neutral-200 px-3 py-1.5 rounded-lg"
+                        className="flex-row items-center bg-card border border-border px-3 py-1.5 rounded-lg"
                     >
                         <ArrowUpDown size={12} color="#525252" strokeWidth={1.5} />
-                        <Text className="ml-1.5 text-[10px] font-bold text-neutral-700 uppercase">
+                        <Text className="ml-1.5 text-[10px] font-bold text-foreground uppercase">
                             {sortBy === 'name' ? 'A-Z' : 'Newest'}
                         </Text>
                     </Pressable>
