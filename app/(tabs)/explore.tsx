@@ -45,7 +45,7 @@ export default function ExploreScreen() {
     };
 
     const renderSkin = ({ item }: { item: any }) => (
-        <View className="flex-1 p-2 m-1 bg-card rounded-xl shadow-sm border border-border">
+        <View className="flex-1 p-2 m-1 bg-card rounded-lg border border-border">
             <View className="relative">
                 <Image
                     source={{ uri: getAssetUrl(item.tilePath) || '' }}
@@ -58,7 +58,7 @@ export default function ExploreScreen() {
                         className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded shadow-sm"
                         style={{ backgroundColor: RARITY_COLORS[item.rarity] }}
                     >
-                        <Text className="text-[7px] text-white font-black uppercase">
+                        <Text className="text-[7px] text-white font-bold uppercase">
                             {RARITY_LABELS[item.rarity]}
                         </Text>
                     </View>
@@ -71,7 +71,7 @@ export default function ExploreScreen() {
                             item.is_owned === 1 ? "bg-success" : "bg-card/90"
                         )}
                     >
-                        <CheckCircle2 size={12} color={item.is_owned === 1 ? "white" : "#404040"} strokeWidth={2} />
+                        <CheckCircle2 size={12} color={item.is_owned === 1 ? "white" : "#71717a"} strokeWidth={2} />
                     </Pressable>
                     <Pressable
                         onPress={() => handleToggleWishlist(item.id, item.is_wishlisted !== 1)}
@@ -80,15 +80,15 @@ export default function ExploreScreen() {
                             item.is_wishlisted === 1 ? "bg-info" : "bg-card/90"
                         )}
                     >
-                        <Heart size={12} color={item.is_wishlisted === 1 ? "white" : "#404040"} strokeWidth={2} fill={item.is_wishlisted === 1 ? "white" : "transparent"} />
+                        <Heart size={12} color={item.is_wishlisted === 1 ? "white" : "#71717a"} strokeWidth={2} fill={item.is_wishlisted === 1 ? "white" : "transparent"} />
                     </Pressable>
                 </View>
             </View>
             <View className="mt-2">
-                <Text className="text-[11px] font-bold text-foreground" numberOfLines={1}>
+                <Text className="text-xs font-semibold text-foreground" numberOfLines={1}>
                     {item.name}
                 </Text>
-                <Text className="text-[9px] text-muted-foreground">
+                <Text className="text-xs text-muted-foreground">
                     {item.champion_name}
                 </Text>
             </View>
@@ -97,19 +97,19 @@ export default function ExploreScreen() {
 
     return (
         <View className="flex-1 bg-background px-4">
-            <View className="py-4 space-y-3">
-                <View className="flex-row items-center bg-card px-3 py-2 rounded-full border border-border">
-                    <Search size={18} color="#737373" strokeWidth={1.5} />
+            <View className="py-6 space-y-3">
+                <View className="flex-row items-center bg-card px-4 py-3 rounded-lg border border-border">
+                    <Search size={18} color="#71717a" strokeWidth={1.5} />
                     <TextInput
                         placeholder="Search skins or champions..."
-                        className="flex-1 ml-2 text-foreground text-sm"
+                        className="flex-1 ml-3 text-foreground text-sm"
                         value={search}
                         onChangeText={setSearch}
-                        placeholderTextColor="#A3A3A3"
+                        placeholderTextColor="#71717a"
                     />
                     {search.length > 0 && (
                         <Pressable onPress={() => setSearch('')}>
-                            <Text className="text-xs text-muted-foreground px-2">Clear</Text>
+                            <Text className="text-xs font-medium text-muted-foreground px-2">Clear</Text>
                         </Pressable>
                     )}
                 </View>
@@ -124,13 +124,13 @@ export default function ExploreScreen() {
                                     setRarity(r);
                                 }}
                                 className={cn(
-                                    "px-4 py-1.5 rounded-full mr-2 border",
-                                    rarity === r ? "bg-primary border-primary" : "bg-card border-border"
+                                    "px-4 py-2 rounded-lg mr-2 border",
+                                    rarity === r ? "bg-foreground border-foreground" : "bg-muted border-border"
                                 )}
                             >
                                 <Text className={cn(
-                                    "text-[10px] font-bold",
-                                    rarity === r ? "text-primary-foreground" : "text-muted-foreground"
+                                    "text-xs font-semibold",
+                                    rarity === r ? "text-background" : "text-muted-foreground"
                                 )}>
                                     {RARITY_LABELS[r]}
                                 </Text>
@@ -139,8 +139,8 @@ export default function ExploreScreen() {
                     </ScrollView>
                 </View>
 
-                <View className="flex-row justify-between items-center bg-muted/50 p-2 rounded-xl">
-                    <Text className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest ml-1">
+                <View className="flex-row justify-between items-center bg-muted p-3 rounded-lg">
+                    <Text className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
                         {skins?.length || 0} Results
                     </Text>
                     <Pressable
@@ -148,10 +148,10 @@ export default function ExploreScreen() {
                             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                             setSortBy(s => s === 'name' ? 'id' : 'name');
                         }}
-                        className="flex-row items-center bg-card border border-border px-3 py-1.5 rounded-lg"
+                        className="flex-row items-center bg-card border border-border px-3 py-2 rounded-lg"
                     >
-                        <ArrowUpDown size={12} color="#525252" strokeWidth={1.5} />
-                        <Text className="ml-1.5 text-[10px] font-bold text-foreground uppercase">
+                        <ArrowUpDown size={12} color="#71717a" strokeWidth={1.5} />
+                        <Text className="ml-2 text-xs font-semibold text-foreground uppercase">
                             {sortBy === 'name' ? 'A-Z' : 'Newest'}
                         </Text>
                     </Pressable>
@@ -160,7 +160,7 @@ export default function ExploreScreen() {
 
             {isLoading ? (
                 <View className="flex-1 justify-center items-center">
-                    <ActivityIndicator color="#000" />
+                    <ActivityIndicator color="#18181b" />
                 </View>
             ) : (
                 <FlashList
@@ -174,7 +174,10 @@ export default function ExploreScreen() {
                         contentContainerStyle: { paddingBottom: 20 },
                         ListEmptyComponent: (
                             <View className="flex-1 justify-center items-center py-20">
-                                <Text className="text-neutral-400">No skins found</Text>
+                                <Text className="text-muted-foreground font-medium">No skins found</Text>
+                                <Text className="text-xs text-muted-foreground mt-2 text-center">
+                                    Try adjusting your search or filters
+                                </Text>
                             </View>
                         )
                     } as any)}

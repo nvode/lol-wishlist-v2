@@ -1,67 +1,63 @@
 @import "tailwindcss";
 @import "uniwind";
 
-@layer base {
-  :root {
-    /* shadcn/ui inspired theme - Zinc palette */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+/* shadcn-inspired theme colors */
+@theme {
+  /* Core colors - zinc-based neutrals */
+  --color-background: #fafafa;
+  --color-foreground: #09090b;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+  /* Card/surface */
+  --color-card: #ffffff;
+  --color-card-foreground: #09090b;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
+  /* Muted backgrounds */
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
 
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
+  /* Primary - subtle indigo */
+  --color-primary: #18181b;
+  --color-primary-foreground: #fafafa;
 
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
+  /* Secondary */
+  --color-secondary: #f4f4f5;
+  --color-secondary-foreground: #18181b;
 
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
+  /* Accent */
+  --color-accent: #f4f4f5;
+  --color-accent-foreground: #18181b;
 
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+  /* Destructive */
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #fafafa;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+  /* Border and input */
+  --color-border: #e4e4e7;
+  --color-input: #e4e4e7;
+  --color-ring: #18181b;
 
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+  /* Legacy compatibility */
+  --color-surface: #ffffff;
+  --color-surface-variant: #f4f4f5;
+  --color-text: #09090b;
+  --color-text-secondary: #71717a;
+  --color-text-muted: #a1a1aa;
+  --color-border-light: #f4f4f5;
 
-    --radius: 0.5rem;
-  }
+  /* Semantic colors */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
 
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
+  /* Form type colors */
+  --color-vial: #8b5cf6;
+  --color-pill: #22c55e;
+  --color-powder: #f59e0b;
 
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-  }
+  /* Status colors */
+  --color-taken: #22c55e;
+  --color-pending: #f59e0b;
+  --color-missed: #ef4444;
+  --color-low-stock: #ef4444;
 }

@@ -60,14 +60,14 @@ export default function SettingsScreen() {
 
     const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
         <View className="mb-6">
-            <Text className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-3 ml-1">{title}</Text>
-            <View className="bg-card rounded-2xl overflow-hidden border border-border shadow-sm">
+            <Text className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">{title}</Text>
+            <View className="bg-card rounded-lg overflow-hidden border border-border shadow-sm">
                 {children}
             </View>
         </View>
     );
 
-    const Row = ({ label, icon: Icon, onPress, value, color = "#404040", description }: any) => (
+    const Row = ({ label, icon: Icon, onPress, value, color = "#71717a", description }: any) => (
         <Pressable
             onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -75,21 +75,21 @@ export default function SettingsScreen() {
             }}
             className="flex-row items-center p-4 active:bg-muted border-b border-border last:border-b-0"
         >
-            <View className="w-8 h-8 rounded-lg items-center justify-center" style={{ backgroundColor: `${color}10` }}>
-                <Icon size={16} color={color} strokeWidth={2} />
+            <View className="w-10 h-10 rounded-lg items-center justify-center" style={{ backgroundColor: `${color}15` }}>
+                <Icon size={18} color={color} strokeWidth={1.5} />
             </View>
-            <View className="ml-3 flex-1">
-                <Text className="text-[13px] font-bold text-foreground">{label}</Text>
-                {description && <Text className="text-[10px] text-muted-foreground mt-0.5">{description}</Text>}
+            <View className="ml-4 flex-1">
+                <Text className="text-sm font-semibold text-foreground">{label}</Text>
+                {description && <Text className="text-xs text-muted-foreground mt-0.5">{description}</Text>}
             </View>
-            {value && <Text className="text-xs font-medium text-muted-foreground">{value}</Text>}
+            {value && <Text className="text-sm font-medium text-muted-foreground">{value}</Text>}
         </Pressable>
     );
 
     return (
-        <ScrollView className="flex-1 bg-background" contentContainerStyle={{ padding: 20 }}>
+        <ScrollView className="flex-1 bg-background" contentContainerStyle={{ padding: 16 }}>
             <View className="py-6">
-                <Text className="text-3xl font-black text-foreground">Settings</Text>
+                <Text className="text-2xl font-bold text-foreground">Settings</Text>
                 <Text className="text-sm text-muted-foreground mt-1">Manage your application and data</Text>
             </View>
 
@@ -131,13 +131,13 @@ export default function SettingsScreen() {
                     label="Give Feedback"
                     icon={Github}
                     onPress={() => Linking.openURL('https://github.com')}
-                    color="#404040"
+                    color="#18181b"
                 />
             </Section>
 
             <View className="items-center py-10 opacity-30">
-                <Heart size={20} color="#000" fill="#000" />
-                <Text className="text-[10px] font-bold uppercase tracking-tighter mt-2">Made for League Fans</Text>
+                <Heart size={20} color="#18181b" fill="#18181b" />
+                <Text className="text-xs font-semibold uppercase tracking-wide mt-2">Made for League Fans</Text>
             </View>
         </ScrollView>
     );

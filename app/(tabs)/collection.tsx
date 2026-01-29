@@ -36,7 +36,7 @@ export default function CollectionScreen() {
     const progress = stats.total > 0 ? (stats.owned / stats.total) * 100 : 0;
 
     const renderItem = ({ item }: { item: any }) => (
-        <View className="flex-1 p-2 m-1 bg-card rounded-xl shadow-sm border border-border">
+        <View className="flex-1 p-2 m-1 bg-card rounded-lg border border-border">
             <View className="relative">
                 <Image
                     source={{ uri: getAssetUrl(activeTab === 'favorites' ? item.squarePortraitPath : item.tilePath) || '' }}
@@ -47,18 +47,18 @@ export default function CollectionScreen() {
                 {activeTab === 'favorites' && (
                     <Pressable
                         onPress={() => handleToggleFavorite(item.id)}
-                        className="absolute top-1.5 right-1.5 p-1.5 rounded-full bg-primary/50 shadow-sm"
+                        className="absolute top-1.5 right-1.5 p-1.5 rounded-full bg-foreground/50 shadow-sm"
                     >
                         <Star size={10} color="white" fill="white" strokeWidth={1.5} />
                     </Pressable>
                 )}
             </View>
             <View className="mt-2">
-                <Text className="text-[11px] font-bold text-foreground" numberOfLines={1}>
+                <Text className="text-xs font-semibold text-foreground" numberOfLines={1}>
                     {item.name}
                 </Text>
                 {activeTab !== 'favorites' && (
-                    <Text className="text-[9px] text-muted-foreground">
+                    <Text className="text-xs text-muted-foreground">
                         {item.champion_name}
                     </Text>
                 )}
@@ -69,17 +69,17 @@ export default function CollectionScreen() {
     return (
         <View className="flex-1 bg-background px-4">
             {/* Progress Header */}
-            <View className="py-4 border-b border-border">
-                <View className="flex-row justify-between items-end mb-2">
+            <View className="py-6 border-b border-border">
+                <View className="flex-row justify-between items-end mb-3">
                     <View>
-                        <Text className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Your Collection</Text>
-                        <Text className="text-xl font-black text-foreground">{stats.owned} <Text className="text-muted">/ {stats.total}</Text></Text>
+                        <Text className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Your Collection</Text>
+                        <Text className="text-2xl font-bold text-foreground">{stats.owned} <Text className="text-muted-foreground">/ {stats.total}</Text></Text>
                     </View>
-                    <Text className="text-xs font-bold text-muted-foreground">{progress.toFixed(1)}%</Text>
+                    <Text className="text-sm font-semibold text-muted-foreground">{progress.toFixed(1)}%</Text>
                 </View>
-                <View className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                <View className="w-full h-2 bg-muted rounded-lg overflow-hidden">
                     <View
-                        className="h-full bg-primary rounded-full"
+                        className="h-full bg-foreground rounded-lg"
                         style={{ width: `${progress}%` }}
                     />
                 </View>
@@ -94,15 +94,15 @@ export default function CollectionScreen() {
                             key={tab.type}
                             onPress={() => handleTabChange(tab.type)}
                             className={cn(
-                                "flex-1 flex-row items-center justify-center py-2.5 rounded-xl border",
-                                isActive ? "bg-primary border-primary shadow-sm" : "bg-card border-border"
+                                "flex-1 flex-row items-center justify-center py-3 rounded-lg border",
+                                isActive ? "bg-foreground border-foreground shadow-sm" : "bg-muted border-border"
                             )}
                         >
-                            <Icon size={14} color={isActive ? "white" : "#737373"} strokeWidth={1.5} />
-                            <View className="w-1.5" />
+                            <Icon size={14} color={isActive ? "#fafafa" : "#71717a"} strokeWidth={1.5} />
+                            <View className="w-2" />
                             <Text className={cn(
-                                "text-[11px] font-bold",
-                                isActive ? "text-primary-foreground" : "text-muted-foreground"
+                                "text-xs font-semibold",
+                                isActive ? "text-background" : "text-muted-foreground"
                             )}>
                                 {tab.label}
                             </Text>
@@ -113,7 +113,7 @@ export default function CollectionScreen() {
 
             {isLoading ? (
                 <View className="flex-1 justify-center items-center">
-                    <ActivityIndicator color="#000" />
+                    <ActivityIndicator color="#18181b" />
                 </View>
             ) : (
                 <FlashList
@@ -129,7 +129,7 @@ export default function CollectionScreen() {
                         ListEmptyComponent: (
                             <View className="flex-1 justify-center items-center py-20">
                                 <Text className="text-muted-foreground font-medium">No items yet</Text>
-                                <Text className="text-[10px] text-muted-foreground mt-1 text-center">
+                                <Text className="text-xs text-muted-foreground mt-2 text-center">
                                     Explore skins and mark them to see them here!
                                 </Text>
                             </View>
