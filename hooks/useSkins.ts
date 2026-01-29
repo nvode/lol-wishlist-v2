@@ -16,9 +16,9 @@ export interface Skin {
     champion_name: string;
 }
 
-export const useSkins = (search: string = '', filter: string = '', sortBy: 'name' | 'id' = 'name') => {
+export const useSkins = (search: string = '', rarity: string = '', sortBy: 'name' | 'id' = 'name') => {
     return useQuery({
-        queryKey: ['skins', search, filter, sortBy],
+        queryKey: ['skins', search, rarity, sortBy],
         queryFn: async (): Promise<Skin[]> => {
             let query = `
         SELECT s.*, c.name as champion_name 
@@ -28,12 +28,13 @@ export const useSkins = (search: string = '', filter: string = '', sortBy: 'name
       `;
             const params: any[] = [`%${search}%`, `%${search}%`];
 
-            if (filter) {
+            if (rarity && rarity !== 'All') {
                 query += ' AND s.rarity = ?';
-                params.push(filter);
+                params.push(rarity);
             }
 
-            query += ` ORDER BY s.${sortBy === 'name' ? 'name' : 'id'} ASC`;
+            const orderBy = sortBy === 'name' ? 's.name ASC' : 's.id DESC';
+            query += ` ORDER BY ${orderBy}`;
 
             const result = await db.getAllAsync<Skin>(query, params);
             return result;

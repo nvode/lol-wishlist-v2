@@ -21,8 +21,8 @@
 - REQ-02: Implement SQLite schema and data import script.
 - REQ-03: Create core navigation wrapper (Collection, Explore, Settings).
 
-### Phase 2: Explore Tab ⬜
-**Status**: ⬜ Not Started
+### Phase 2: Explore Tab ✅
+**Status**: ✅ Complete
 **Objective**: Build a high-performance searchable grid for 6,000+ skins.
 - REQ-04: Implement skin card component with remote images.
 - REQ-05: Build search and filter logic (Champion, Rarity, Line).

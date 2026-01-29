@@ -5,5 +5,5 @@ const { getDefaultConfig } = require('expo/metro-config');
 const config = getDefaultConfig(__dirname);
 
 module.exports = withUniwindConfig(config, {
-  input: './global.css',
+  cssEntryFile: './global.css',
 });
