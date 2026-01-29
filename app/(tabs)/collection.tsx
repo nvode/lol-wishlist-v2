@@ -1,3 +1,4 @@
+import ChampionPickerModal from '@/components/ChampionPickerModal';
 import { useChampionMutations } from '@/hooks/useChampionMutations';
 import { useCollection } from '@/hooks/useCollection';
 import { getAssetUrl } from '@/lib/assets';
@@ -5,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { FlashList } from '@shopify/flash-list';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
-import { CheckCircle2, Heart, Star } from 'lucide-react-native';
+import { CheckCircle2, Heart, Plus, Star } from 'lucide-react-native';
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 
@@ -13,6 +14,7 @@ type TabType = 'owned' | 'wishlist' | 'favorites';
 
 export default function CollectionScreen() {
     const [activeTab, setActiveTab] = useState<TabType>('owned');
+    const [pickerVisible, setPickerVisible] = useState(false);
     const { data, isLoading } = useCollection(activeTab);
     const { toggleFavorite } = useChampionMutations();
 
@@ -111,6 +113,19 @@ export default function CollectionScreen() {
                 })}
             </View>
 
+            {activeTab === 'favorites' && (
+                <Pressable
+                    onPress={() => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        setPickerVisible(true);
+                    }}
+                    className="flex-row items-center justify-center bg-card border border-dashed border-border p-3 rounded-lg mb-4 active:bg-muted"
+                >
+                    <Plus size={18} color="#71717a" />
+                    <Text className="ml-2 font-semibold text-muted-foreground">Manage Favorite Champions</Text>
+                </Pressable>
+            )}
+
             {isLoading ? (
                 <View className="flex-1 justify-center items-center">
                     <ActivityIndicator color="#18181b" />
@@ -130,13 +145,18 @@ export default function CollectionScreen() {
                             <View className="flex-1 justify-center items-center py-20">
                                 <Text className="text-muted-foreground font-medium">No items yet</Text>
                                 <Text className="text-xs text-muted-foreground mt-2 text-center">
-                                    Explore skins and mark them to see them here!
+                                    Explore and add items to see them here!
                                 </Text>
                             </View>
                         )
                     } as any)}
                 />
             )}
+
+            <ChampionPickerModal
+                visible={pickerVisible}
+                onClose={() => setPickerVisible(false)}
+            />
         </View>
     );
 }
