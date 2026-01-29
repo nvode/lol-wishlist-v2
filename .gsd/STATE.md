@@ -6,10 +6,11 @@
 - **Status**: ✅ PROJECT COMPLETE
 
 ## Recent Accomplishments
-- Implemented Settings screen with OTA updates and data management.
-- Added haptic feedback across all user interactions.
-- Applied final premium polish to UI.
-- Verified all 4 phases against SPEC requirements.
+- **Major Refactor**: Migrated all styling to Tailwind CSS (v4) with semantic tokens (`bg-card`, `text-foreground`).
+- **Cleanup**: Removed all unused Expo template files and components.
+- **Bug Fixes**: Resolved duplicate Collection tab issue, fixed image loading fallbacks.
+- **Feature**: Implemented `FilterModal` for better filtering UX in Explore tab.
+- **Design System**: Standardized typography, spacing, and colors across the app.
 
 ## Last Session Summary
 Phase 4 executed successfully. The League of Legends Wishlist app is now feature-complete with:
